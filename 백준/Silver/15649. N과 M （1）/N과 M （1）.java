@@ -1,38 +1,36 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main{
-    public static void main(String args[]){
-
-        int n,m;
-        Scanner scan = new Scanner(System.in);
-        n = scan.nextInt();
-        m = scan.nextInt();
-
-        int arr[] = new int[n];
-        boolean visited[] = new boolean [n];
-
-
-        func(0,n,m,arr,visited);
-        
-    }
-    static void func(int count,int n,int m,int[] arr,boolean[] visited){
-        if(count == m){
-            for(int i = 0;i<m;i++){
-                System.out.print(arr[i]);
-                System.out.print(" ");
-            }
-            System.out.println("");
-            return;
-        }
-        for(int i = 0;i<n;i++){ //0~n-1까지
-            if(!visited[i]){ //방문 안했으면
-                visited[i] = true; //방문 체크
-                arr[count] = i+1;  //arr[count] = i+1 (1~n) 
-                func(count+1,n,m,arr,visited);  // count = visited[true] 개수 
-                visited[i] = false;
-            }
-        }
-    }
-
-   
+	static int n,m;
+	static boolean []_visited ;
+	static StringBuilder sb;
+	public static void main(String[] args) throws Exception {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		sb = new StringBuilder();
+		String [] tokens = br.readLine().split(" ");
+		n = Integer.parseInt(tokens[0]);
+		m = Integer.parseInt(tokens[1]);
+		_visited = new boolean[n+1];
+		perm(m, new int[m]);
+		System.out.println(sb.toString());
+	}
+	static void perm(int cnt,int [] arr) {
+		if(cnt == 0) {
+			for(int i: arr) {
+				sb.append(i).append(" ");
+			}
+			sb.append("\n");
+			return;
+		}
+		for(int i = 1 ; i < n+1; i++) {
+			if(!_visited[i]) {
+				_visited[i] = true;
+				arr[m-cnt] = i;
+				perm(cnt-1,arr);
+				_visited[i] = false;
+			}
+		}
+	}
 }
