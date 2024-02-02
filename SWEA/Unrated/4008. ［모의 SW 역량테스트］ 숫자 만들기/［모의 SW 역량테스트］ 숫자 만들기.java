@@ -33,12 +33,11 @@ public class Solution{
 		System.out.println(sb.toString());
 	}
 	static void perm(int cnt, int calc, int [] opers) {
-		if(cnt == n-1) {
+		if(++cnt == n) {
 			_max = Math.max(_max, calc);
 			_min = Math.min(_min, calc);
 			return;
 		}
-		cnt++;
 		if(opers[0] > 0) {
 			opers[0]--;
 			perm(cnt , calc + nums[cnt],opers);
