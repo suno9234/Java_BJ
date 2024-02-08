@@ -13,6 +13,7 @@ public class Main {
 	static int [] virusInfo;
 	static int totalVirus = 0;
 	static int time;
+	static int blank = 0;
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String [] tokens = br.readLine().split(" ");
@@ -27,6 +28,8 @@ public class Main {
 				_map[i][j] = Integer.parseInt(tokens[j]);
 				if(_map[i][j] == 2) {
 					virus[totalVirus++] = i*n+j;
+				}else if(_map[i][j] ==0) {
+					blank++;
 				}
 			}
 		}
@@ -51,22 +54,11 @@ public class Main {
 		}
 	}
 	public static void bfs() {
-		int flag = 0;
-		for(int i = 0 ; i < n ; i++) {
-			if (flag == 1) {
-				break;
-			}
-			for(int j = 0 ; j < n ; j++) {
-				if(_map[i][j] == 0) {
-					flag = 1;
-					break;
-				}
-			}
-		}
-		if(flag == 0) {
+		if(blank == 0) {
 			answer = 0;
 			return;
 		}
+		int fillSpace = blank;
 		boolean [][] _visited = new boolean[n][n] ;
 		ArrayDeque<Integer> q = new ArrayDeque<>();
 		for(int v : virusInfo) {
@@ -87,38 +79,19 @@ public class Main {
 					if(nx >=0 && ny >=0 && nx <n && ny <n && _map[nx][ny]!=1 && !_visited[nx][ny] ) {
 						_visited[nx][ny] = true;
 						nextQ.add(nx*n+ny);
+						if(_map[nx][ny] == 0) {
+							fillSpace--;
+						}
 					}
 				}
 			}
 			time++;
 			q = nextQ;
-			flag = 0;
-			for(int i = 0 ; i < n ; i++) {
-				if(flag == 1) {
-					break;
-				}
-				for(int j = 0 ; j < n ; j++) {
-					if(!_visited[i][j] && _map[i][j] == 0) {
-						flag = 1;
-						break;
-					}
-				}
-			}
-			if(flag == 0) {
+			if(fillSpace == 0) {
 				answer = Math.min(answer, time);
 				break;
 			}
 			
 		}
-		for(int i = 0 ; i < n ; i++) {
-			for(int j = 0 ; j < n ; j++) {
-				if( !_visited[i][j] && _map[i][j] == 0) {
-					// (i,j)에 대하여 아직 방문하지 않았고, (i,j)가 빈공간이라면
-					return;
-				}
-			}
-		}
-		// 꽉 찬 경우만
-		answer = Math.min(time, answer);
 	}
 }
