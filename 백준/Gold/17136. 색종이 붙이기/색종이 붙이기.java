@@ -30,6 +30,9 @@ public class Main {
     }
     static void perm(List<int[]> ones, int cnt,int [] papers){
         // i = start / 10 부터 j = start%10 부터
+        if(cnt >= answer){
+            return;
+        }
         for(int [] now : ones){
             int x = now[0];
             int y = now[1];
