@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-
+ 
 public class Solution {
     static int answer , n, k;
     static int [][] _map ;
@@ -11,7 +11,7 @@ public class Solution {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder stringBuilder = new StringBuilder();
         String [] tokens;
-
+ 
         int test_case = Integer.parseInt(bufferedReader.readLine())+1;
         for(int tc = 1 ; tc < test_case ; tc++){
             tokens = bufferedReader.readLine().split(" ");
@@ -27,7 +27,7 @@ public class Solution {
             answer = 0;
             int maxHeight = 0;
             ArrayList <int[]> tops = new ArrayList<>();
-
+ 
             for(int i = 0 ; i < n ; i++){
                 tokens = bufferedReader.readLine().split(" ");
                 for(int j = 0 ; j < n ; j++){
@@ -41,7 +41,7 @@ public class Solution {
                     }
                 }
             }
-
+ 
             for(int i = 0 ; i < n; i++){
                 for(int j = 0 ; j < n ; j++){
                     for(int m = 0 ; m < k+1 && _map[i][j]-m >= 0 ; m++){
@@ -55,7 +55,7 @@ public class Solution {
                     }
                 }
             }
-
+ 
             stringBuilder.append("#").append(tc).append(" ").append(answer).append("\n");
         }
         System.out.println(stringBuilder.toString());
