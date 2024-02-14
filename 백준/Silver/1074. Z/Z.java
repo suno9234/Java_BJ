@@ -1,46 +1,52 @@
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n,r,c;
+public class Main{
+	static int n,r,c;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String [] tokens = br.readLine().split(" ");
+		n = Integer.parseInt(tokens[0]);
+		r = Integer.parseInt(tokens[1]);
+		c = Integer.parseInt(tokens[2]);
+		solve(0,0,(int)Math.pow(2, n),0);
+	}
 
-        n = scanner.nextInt();
-        r = scanner.nextInt();
-        c = scanner.nextInt();
-
-        int answer = 0;
-        int divider = (int)Math.pow(2,15);
-        // r행 c열
-        while (true){
-            if(divider <= r) {
-                answer += 2 * (divider) * (divider);
-            }
-            if (r/divider > 0){
-                r = r %divider;
-            }
-            if (divider == 1){
-                break;
-            }
-            divider /= 2;
-
-        }
-        divider = (int)Math.pow(2,15);
-        while(true){
-            if(divider<= c){
-                answer+= (divider)*(divider);
-            }
-            if(c/divider > 0){
-                c = c % divider;
-            }
-            if(divider == 1){
-                break;
-            }
-            divider /= 2;
-
-        }
-        System.out.println(answer);
-
-
-    }
+	static int solve(int x , int y, int n ,int idx) {
+		int temp = idx;
+		if(n == 2) {
+			if(x == r && y == c) {
+				System.out.println(temp);
+				System.exit(0);
+			}
+			temp++;
+			if(x == r && y+1 == c) {
+				System.out.println(temp);
+				System.exit(0);
+			}
+			temp++;
+			if(x+1 == r && y == c) {
+				System.out.println(temp);
+				System.exit(0);
+			}
+			temp++;
+			if(x+1 == r && y+1 == c) {
+				System.out.println(temp);
+				System.exit(0);
+			}
+			temp++;
+			return idx;
+		}
+		
+		if(r< x+ (n/2) && c < y+(n/2)) {
+			return solve(x,y,n/2,idx);
+		}else if(r < x+(n/2)) {
+			return solve(x,y+n/2,n/2,idx+(n/2)*(n/2));
+		}else if(c < y+(n/2)) {
+			return solve(x+n/2,y,n/2,idx+(n/2)*(n/2)*2);
+		}else {
+			return solve(x+n/2,y+n/2,n/2,idx+(n/2)*(n/2)*3);
+		}
+		
+	}
 }
