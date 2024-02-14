@@ -4,6 +4,7 @@ import java.util.*;
 public class Main{
 	static int n;
 	static int [][] _map;
+	static StringBuilder sb = new StringBuilder();
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		n = Integer.parseInt(br.readLine());
@@ -14,11 +15,11 @@ public class Main{
 				_map[i][j] = nl.charAt(j)-'0';
 			}
 		}
-		System.out.println(quadTree(0,0,n).toString());
+		quadTree(0,0,n);
+		System.out.println(sb.toString());
 		
 	}
-	static StringBuilder quadTree(int x , int y , int n) {
-		StringBuilder sb = new StringBuilder();
+	static void quadTree(int x , int y , int n) {
 		int start = _map[x][y];
 		int flag=  0;
 		for(int i = 0 ; i < n ; i++) {
@@ -35,13 +36,12 @@ public class Main{
 			sb.append(start);
 		}else {
 			sb.append("(");
-			sb.append(quadTree(x,y,n/2));
-			sb.append(quadTree(x,y+n/2,n/2));
-			sb.append(quadTree(x+n/2,y,n/2));
-			sb.append(quadTree(x+n/2,y+n/2,n/2));
+			quadTree(x,y,n/2);
+			quadTree(x,y+n/2,n/2);
+			quadTree(x+n/2,y,n/2);
+			quadTree(x+n/2,y+n/2,n/2);
 			sb.append(")");
 		}
-		return sb;
 	}
 
 }
