@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class Main{
 	static int n;
 	static int [][] _map;
 	public static void main(String[] args) throws Exception{
@@ -14,10 +14,10 @@ public class Main {
 				_map[i][j] = nl.charAt(j)-'0';
 			}
 		}
-		System.out.println(quadTree(0,0,n));
+		System.out.println(quadTree(0,0,n).toString());
 		
 	}
-	static String quadTree(int x , int y , int n) {
+	static StringBuilder quadTree(int x , int y , int n) {
 		StringBuilder sb = new StringBuilder();
 		int start = _map[x][y];
 		int flag=  0;
@@ -41,7 +41,7 @@ public class Main {
 			sb.append(quadTree(x+n/2,y+n/2,n/2));
 			sb.append(")");
 		}
-		return sb.toString();
+		return sb;
 	}
 
 }
