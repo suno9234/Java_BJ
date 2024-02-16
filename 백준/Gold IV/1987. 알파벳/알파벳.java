@@ -6,7 +6,7 @@ public class Main{
 	static int r,c,answer;
 	static char [][] _map;
 	static boolean [][] v;
-	static boolean [] al ;
+	static int mask;
 	static int [] dx = {1,-1,0,0};
 	static int [] dy = {0,0,1,-1};
 	public static void main(String[] args) throws Exception {
@@ -16,7 +16,7 @@ public class Main{
 		c = Integer.parseInt(tokens[1]);
 		_map = new char[r][c];
 		v = new boolean[r][c];
-		al = new boolean[26];
+		mask = 0;
 		for(int i = 0 ; i < r ; i++) {
 			String nl = br.readLine();
 			for(int j = 0 ; j < c ; j++) {
@@ -28,15 +28,15 @@ public class Main{
 	}
 	static void dfs(int x , int y,int cnt) {
 		v[x][y] = true;
-		al[_map[x][y]-'A'] = true;
+		mask |= (1 << (_map[x][y]-'A'));
 		answer = Math.max(answer, cnt);
 		for(int i = 0 ; i < 4 ; i++) {
 			int nx = x+dx[i];
 			int ny = y+dy[i];
-			if(nx >=0 && ny >=0 && nx <r && ny < c && !v[nx][ny] && !al[_map[nx][ny]-'A']) {
+			if(nx >=0 && ny >=0 && nx <r && ny < c && !v[nx][ny] && ((mask >> (_map[nx][ny]-'A')) & 1) == 0) {
 				dfs(nx,ny,cnt+1);
 				v[nx][ny] = false;
-				al[_map[nx][ny]-'A'] = false;
+				mask ^= (1<< (_map[nx][ny]-'A'));
 			}
 		}
 	}
