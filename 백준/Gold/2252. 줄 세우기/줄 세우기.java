@@ -4,7 +4,7 @@ import java.util.*;
 public class Main{
 
 	static int n,m;
-	static List<Integer>[] graph;
+	static ArrayDeque<Integer>[] graph;
 	public static void main(String[] args) throws Exception{
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -12,9 +12,9 @@ public class Main{
 		String [] tokens = br.readLine().split(" ");
 		n = Integer.parseInt(tokens[0]);
 		m = Integer.parseInt(tokens[1]);
-		graph = new List[n+1];
+		graph = new ArrayDeque[n+1];
 		for(int i = 0 ; i < n+1; i++) {
-			graph[i] = new ArrayList<Integer>();
+			graph[i] = new ArrayDeque<Integer>();
 		}
 		int [] inter = new int [n+1];
 		for(int i = 0 ; i <m; i++) {
@@ -24,7 +24,6 @@ public class Main{
 			graph[a].add(b);
 			inter[b]++;
 		}
-		int cnt = 0;
 		ArrayDeque<Integer> q = new ArrayDeque<>();
 		for(int i = 1; i < n+1 ; i++) {
 			if(inter[i] == 0) {
@@ -33,10 +32,10 @@ public class Main{
 		}
 		while(!q.isEmpty()) {
 			int now = q.poll();
-			cnt++;
 			sb.append(now).append(" ");
-			List<Integer> nexts = graph[now];
-			for(int n : nexts) {
+			ArrayDeque<Integer> nexts = graph[now];
+			while(!nexts.isEmpty()) {
+				int n = nexts.poll();
 				inter[n]--;
 				if(inter[n] == 0) {
 					q.add(n);
