@@ -44,29 +44,32 @@ public class Main{
         	}
         }
         
-        for(int i = 2 ; i < islandsNum; i++) {
-        	for(int [] coor : islands[i]) {
-        		// i번째 섬의 경계에 대해 계산
-        		for(int j = i+1 ; j < islandsNum; j++) {
-        			// 조합인 이유 -> 1 2 = 2 1
-        			for(int [] nextCoor : islands[j]) {
-        				answer = Math.min(answer,Math.abs(coor[0]-nextCoor[0])+Math.abs(coor[1]-nextCoor[1])-1);
-        			}
-            		
-            	}
-        	}
-        }
         System.out.println(answer);
         br.close();
 	}
     
     static void check(int x , int y , int num) {
-    	for(int i = 0 ; i < 4 ; i++) {
-    		int nx = x+dx[i];
-    		int ny = y+dy[i];
-    		if(nx >=0 && ny >=0 && nx <n && ny < n && _map[nx][ny] == 0) {
-    			islands[num].add(new int[] {x,y});
+    	boolean [][] v = new boolean[n][n];
+    	ArrayDeque<int[]> queue = new ArrayDeque<>();
+    	queue.add(new int[] {x,y,0});
+    	v[x][y] = true;
+    	while(!queue.isEmpty()) {
+    		int [] now = queue.poll();
+    		x = now[0];
+    		y = now[1];
+    		int dist = now[2];
+    		if(_map[x][y]>0 && _map[x][y]!= num) {
+    			answer = Math.min(answer, dist-1);
+    			return;
     		}
+    		for(int i = 0 ; i < 4 ; i++) {
+        		int nx = x+dx[i];
+        		int ny = y+dy[i];
+        		if(nx >=0 && ny >=0 && nx <n && ny < n && !v[nx][ny] && dist < answer) {
+        			v[nx][ny] = true;
+        			queue.add(new int[] {nx,ny,dist+1});
+        		}
+        	}
     	}
     }
     
