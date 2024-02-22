@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Solution {
+public class Solution{
 
 	static int v, e;
 	static long answer;
@@ -38,7 +38,7 @@ public class Solution {
 				graph[a].add(new int[] { b, cost });
 				graph[b].add(new int[] { a, cost });
 			}
-			if (e > v * (v - 1) / 2) {
+			if (e < v * (v - 1) / 2) {
 				answer = prim();
 			} else {
 				answer = kruskal();
