@@ -21,19 +21,11 @@ public class Main{
         hm.put(c,1);
         for(int i = 0 ; i < k ; i++) {
         	sushi[n+i] = sushi[i];
-        	if(hm.get(sushi[i]) == null) {
-        		hm.put(sushi[i],1);
-        	}else {
-        		hm.put(sushi[i], hm.get(sushi[i])+1);
-        	}
+       		hm.put(sushi[i], hm.getOrDefault(sushi[i],0)+1);
         }
         answer = hm.size();
         for(int i = 0; i < n ; i++) {
-        	if(hm.get(sushi[k+i]) == null) {
-        		hm.put(sushi[k+i],1);
-        	}else {
-        		hm.put(sushi[k+i], hm.get(sushi[k+i])+1);
-        	}
+        	hm.put(sushi[k+i], hm.getOrDefault(sushi[k+i],0)+1);   	
         	int cnt = hm.get(sushi[i])-1; 
         	if(cnt == 0) {
         		hm.remove(sushi[i]);
