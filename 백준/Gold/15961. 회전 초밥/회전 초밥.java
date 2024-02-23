@@ -41,6 +41,9 @@ public class Main{
         		hm.put(sushi[i], cnt);
         	}
         	answer = Math.max(answer,hm.size());
+        	if(answer == k+1) {
+        		break;
+        	}
         }
         
         System.out.println(answer);
