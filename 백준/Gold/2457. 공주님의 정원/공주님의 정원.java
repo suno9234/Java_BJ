@@ -79,16 +79,42 @@ public class Main {
 	static int toIdx(int m, int d) {
 		while (m > 1) {
 			switch (m) {
-			case 2, 4, 6, 8, 9, 11:
+			case 2 :
+				d += 31;
+				break;
+			case 4 :
+				d += 31;
+				break;
+			case 6 :
+				d += 31;
+				break;
+			case 8 :
+				d += 31;
+				break;
+			case 9 :
+				d += 31;
+				break;
+			case 11 :
 				d += 31;
 				break;
 			case 3:
 				d += 28;
 				break;
-			case 5, 7, 10, 12:
+			case 5:
 				d += 30;
 				break;
+			case 7:
+				d += 30;
+				break;
+			case 10:
+				d += 30;
+				break;
+			case 12:
+				d += 30;
+				break;
+		
 			}
+			
 			m--;
 		}
 		return d;
