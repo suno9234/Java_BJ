@@ -1,12 +1,9 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
 
-public class Main {
+import java.io.*;
+import java.util.*;
+
+public class Main{
+	
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String [] tokens = bufferedReader.readLine().split(" ");
@@ -20,7 +17,7 @@ public class Main {
         for(int [] e : energy){
             Arrays.fill(e,5);
         }
-        ArrayList<Integer>[][] trees = new ArrayList[n][n];
+        List<Integer>[][] trees = new List[n][n];
         for(int i = 0 ; i < n ; i++){
             for(int j = 0; j< n ; j++){
                 trees[i][j] = new ArrayList<>();
@@ -28,9 +25,9 @@ public class Main {
         }
 
         for(int i = 0 ; i < n ; i++){
-            String [] nl = bufferedReader.readLine().split(" ");
+            tokens = bufferedReader.readLine().split(" ");
             for(int j = 0 ; j < n ; j++){
-                A[i][j] = Integer.parseInt(nl[j]);
+                A[i][j] = Integer.parseInt(tokens[j]);
             }
         }
         for(int i = 0 ; i < m ; i++){
@@ -43,7 +40,7 @@ public class Main {
         }
 
         for(int i = 0 ; i < k ; i++){
-            // 봄
+            // 봄 + 여름 
             int [][] newEnergy  = new int[n][n];
 
             for(int j = 0 ; j < n ; j++){
@@ -51,10 +48,10 @@ public class Main {
                     ArrayList<Integer> nextTree = new ArrayList<Integer>();
                     for( int tree : trees[j][l]){
                         if(energy[j][l] >= tree){
-                            energy[j][l] -= tree;
-                            nextTree.add(tree+1);
+                            energy[j][l] -= tree; // tree에는 작은것부터
+                            nextTree.add(tree+1); // 나이 +1
                         }else{
-                            newEnergy[j][l]+=tree/2;
+                            newEnergy[j][l]+=tree/2; // 뒤져서 수명의 절반만큼 에너지
                         }
                     }
                     trees[j][l]=nextTree;
@@ -62,7 +59,7 @@ public class Main {
                 }
             }
 
-            // 가을
+            // 가을 + 겨울
             ArrayList<Integer> [][] newTrees = new ArrayList[n][n];
             for(int l = 0 ; l < n ; l++){
                 for(int j = 0; j< n ; j++){
@@ -71,9 +68,9 @@ public class Main {
             }
             for(int j = 0 ; j < n ; j++){
                 for(int l = 0 ; l < n ; l++) {
-                    energy[j][l] += A[j][l];
+                    energy[j][l] += A[j][l]; // 양분 ++ (겨울(가을에서 양분 안씀))
                     for(int t : trees[j][l]){
-                        if(t % 5 == 0){
+                        if(t % 5 == 0){ // 번식
                             if(j+1 < n && l+1 < n){
                                 newTrees[j+1][l+1].add(1);
                             }
@@ -105,6 +102,7 @@ public class Main {
             }
             for(int j = 0 ; j < n ; j++){
                 for(int l = 0 ; l < n ; l++){
+                	// 새로생긴놈(작은놈) 넣고 원래있던놈 추가
                     newTrees[j][l].addAll(trees[j][l]);
                     trees[j][l] = newTrees[j][l];
                 }
