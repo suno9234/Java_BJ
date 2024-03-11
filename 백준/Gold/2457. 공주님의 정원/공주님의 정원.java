@@ -1,61 +1,61 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-public class Main {
+public class Main{
+
+	static int n, answer = -1;
+	static int[] endDay;
+
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		int []projects = new int[1232];
+		String[] tokens = br.readLine().split(" ");
+		n = Integer.parseInt(tokens[0]);
+		endDay = new int[1232];
 		for (int i = 0; i < n; i++) {
-			String[] tokens = br.readLine().split(" ");
-			int sI = Integer.parseInt(tokens[0])*100+Integer.parseInt(tokens[1]);
-			int eI = Integer.parseInt(tokens[2])*100+Integer.parseInt(tokens[3]);
-			if (projects[sI] < eI) {
-				projects[sI] = eI;
-			}
+			tokens = br.readLine().split(" ");
+			int sm = Integer.parseInt(tokens[0]);
+			int sd = Integer.parseInt(tokens[1]);
+			int em = Integer.parseInt(tokens[2]);
+			int ed = Integer.parseInt(tokens[3]);
+			int s = sm * 100 + sd;
+			int e = em * 100 + ed;
+			if (endDay[s] < e)
+				endDay[s] = e;
 		}
 		int answer = Integer.MAX_VALUE;
-		for (int i = 1; i <= 301; i++) {
+		for (int i = 101; i <= 301; i++) {
+			int startDay = i;
 			int cnt = 0;
-			int start = i;
-			if (projects[i] == 0)
-				continue;
-			while (true) {
-				int eI = projects[start];
-				cnt++;
-				if (eI > 0) {
-					if (eI > 1130) {
+			if (endDay[startDay] > 0) {
+				while (true) {
+					int ed = endDay[startDay];
+					cnt++;
+					if (ed >= 1131) {
 						answer = Math.min(answer, cnt);
 						break;
 					} else {
-						int flag = 0;
-						int maxIndex = -1;
-						int maxValue = 0;
-						for (int j = eI; j > start; j--) {
-							if (projects[j] > 0) {
-								if (maxValue < projects[j]) {
-									maxValue = projects[j];
-									maxIndex = j;
-								}
-								flag = 1;
+						int maxDay = -1;
+						int maxEndDay = 0;
+						for (int j = ed; j > startDay; j--) {
+							if (maxEndDay < endDay[j]) {
+								maxEndDay = endDay[j];
+								maxDay = j;
 							}
 						}
-						if (flag == 0) {
+						if (maxEndDay == 0) {
 							break;
 						}
-						start = maxIndex;
+						startDay = maxDay;
 					}
-				} else {
-					break;
+
 				}
-
 			}
-
 		}
-		if (answer == Integer.MAX_VALUE) {
+		if (answer == Integer.MAX_VALUE)
 			System.out.println(0);
-		} else {
+		else
 			System.out.println(answer);
-		}
+
 	}
+
 }
