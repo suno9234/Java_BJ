@@ -1,11 +1,10 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class Main{
 	static int n, m, answer;
 	static int initDist;
 	static int[] parent;
-	static ArrayList<int []> road;
 	static List<int[]>[] graph;
 
 	public static void main(String[] args) throws Exception {
@@ -25,12 +24,10 @@ public class Main {
 			graph[a].add(new int[] { b, t });
 			graph[b].add(new int[] { a, t });
 		}
-		road = new ArrayList<>();
 		parent = new int[n + 1];
 		initDist = dijkstra(new int[] { -1, -1 });
 		int node = n;
 		while(node > 1) {
-			road.add(new int[] {node,parent[node]});
 			int result = dijkstra(new int[] {node,parent[node]});
 			if(result == -1) {
 				// 끝까지 못가는 경우
@@ -52,12 +49,10 @@ public class Main {
 		Arrays.fill(minDist, Integer.MAX_VALUE);
 		minDist[1] = 0;
 		pq.add(new int[] { 1, 0,1 });
-		int last = 1;
 		while (!pq.isEmpty()) {
 			int[] now = pq.poll();
 			int pos = now[0];
 			int dist = now[1];
-			int start = now[2];
 			if (v[pos])
 				continue;
 			if (pos == n) {
