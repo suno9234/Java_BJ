@@ -28,11 +28,6 @@ public class Main{
 					startX = i;
 					startY = j;
 				}
-			}
-		}
-
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
 				for (int k = 0; k < ((1 << 7)); k++) {
 					dist[i][j][k] = -1;
 				}
