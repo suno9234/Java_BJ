@@ -15,14 +15,17 @@ public class Main{
         for(int i = 1 ; i < n ; i++) {
         	for(int j = 0 ; j < 10 ; j++) {
         		for(int v = 0 ; v < (1<<10) ; v++) {
-        			// dp[i][j][v방문추가]
+        			// dp[i+1][j+1][v방문추가]
+        			// dp[i+1][j-1][v방문추가]
         			// 현재 = dp[i][j][v]
         			if(j+1 < 10) {
-        				dp[i+1][j+1][v | (1<<(j+1))] = (dp[i+1][j+1][v | (1<<(j+1))] + dp[i][j][v])%1_000_000_000;
+        				int nv = v | (1<<(j+1));
+        				dp[i+1][j+1][nv] = (dp[i+1][j+1][nv] + dp[i][j][v])%1_000_000_000;
         				//System.out.printf("dp[%d][%d][%d] : %d\n",i+1,j+1,v,dp[i+1][j+1][v | (1<<(j+1))]);
         			}
         			if(j-1 >= 0) {
-        				dp[i+1][j-1][v | (1<<(j-1))] = (dp[i+1][j-1][v | (1<<(j-1))] + dp[i][j][v])%1_000_000_000;
+        				int nv = v | (1<<(j-1));
+        				dp[i+1][j-1][nv] = (dp[i+1][j-1][nv] + dp[i][j][v])%1_000_000_000;
         				//System.out.printf("dp[%d][%d][%d] : %d\n",i+1,j-1,v,dp[i+1][j-1][v | (1<<(j-1))]);
         			}
         		}
