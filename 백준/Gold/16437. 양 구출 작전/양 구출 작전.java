@@ -9,17 +9,17 @@ public class Main{
     public static void main(String[] args) throws Exception {
 //    	System.setIn(new FileInputStream("res/input_d2_2001.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String [] tokens;
+        StringTokenizer st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
-        n = Integer.parseInt(br.readLine());
+        n = Integer.parseInt(st.nextToken());
         in = new int[n+1];
         nexts = new int[n+1];
         info = new long[n+1];
         for(int i = 0 ; i < n-1 ; i++) {
-        	tokens = br.readLine().split(" ");
-        	String type = tokens[0];
-        	int count = Integer.parseInt(tokens[1]);
-        	int next = Integer.parseInt(tokens[2]);
+        	st = new StringTokenizer(br.readLine());
+        	String type = st.nextToken();
+        	int count = Integer.parseInt(st.nextToken());
+        	int next = Integer.parseInt(st.nextToken());
         	in[next]++;
         	if(type.equals("S")) {
         		info[i+2] = count;
