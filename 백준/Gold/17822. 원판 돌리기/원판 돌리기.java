@@ -11,24 +11,24 @@ public class Main{
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] tokens = br.readLine().split(" ");
+        StringTokenizer st = new StringTokenizer(br.readLine());
 		StringBuilder sb = new StringBuilder();
 
-		n = Integer.parseInt(tokens[0]);
-		m = Integer.parseInt(tokens[1]);
-		t = Integer.parseInt(tokens[2]);
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
+		t = Integer.parseInt(st.nextToken());
 		onepan = new int[n][m];
 		for (int i = 0; i < n; i++) {
-			tokens = br.readLine().split(" ");
+			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < m; j++) {
-				onepan[i][j] = Integer.parseInt(tokens[j]);
+				onepan[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 		for (int i = 0; i < t; i++) {
-			tokens = br.readLine().split(" ");
-			int x = Integer.parseInt(tokens[0]);
-			int d = Integer.parseInt(tokens[1]);
-			int k = Integer.parseInt(tokens[2]);
+			st = new StringTokenizer(br.readLine());
+			int x = Integer.parseInt(st.nextToken());
+			int d = Integer.parseInt(st.nextToken());
+			int k = Integer.parseInt(st.nextToken());
 			if (d == 1) {
 				// 0 = 시계
 				// 1 = 반시계
