@@ -59,9 +59,11 @@ public class Main{
     		}
     	}
     	gravityG();
+    	int flag = 0;
     	for(int i = 0 ; i < 2 ; i++) {
     		for(int j = 0 ; j < 4 ; j++) {
     			if(green[i][j] != 0) {
+    				flag = 1;
     				for(int k = 0 ; k < 4 ; k++) {
     					green[i+4][k] = 0;
     				}
@@ -69,6 +71,7 @@ public class Main{
     			}
     		}
     	}
+    	if(flag == 1)
     	gravityG();
     	return result;
     }
@@ -91,9 +94,11 @@ public class Main{
     		}
     	}
     	gravityB();
+    	int flag = 0;
     	for(int i = 0 ; i <2 ; i++) {
     		for(int j = 0 ; j < 4 ; j++) {
     			if(blue[j][i]!=0) {
+    				flag = 1;
     				for(int k = 0 ; k < 4 ; k++) {
     					blue[k][i+4] = 0;
     				}
@@ -101,6 +106,7 @@ public class Main{
     			}
     		}
     	}
+    	if(flag == 1)
     	gravityB();
     	return result;
     }
