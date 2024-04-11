@@ -9,32 +9,30 @@ public class Main{
     static int[] dy = {1,0,-1,0};
     static int [][] _map;
     static int [][] indexMap;
-
     static int [] d1Map;
     public static void main(String[] args) throws Exception{
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder stringBuilder = new StringBuilder();
-        String [] tokens = bufferedReader.readLine().split(" ");
-        n = Integer.parseInt(tokens[0]);
-        m = Integer.parseInt(tokens[1]);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
         deleted = new int[4];
         _map = new int[n][n];
         indexMap = new int[n][n];
         d1Map = new int[n*n];
         for(int i = 0 ; i < n ; i++){
-            tokens = bufferedReader.readLine().split(" ");
+            st = new StringTokenizer(br.readLine());
             for(int j = 0 ; j < n ; j++){
-                _map[i][j] = Integer.parseInt(tokens[j]);
+                _map[i][j] = Integer.parseInt(st.nextToken());
                 indexMap[i][j] = -1;
             }
 
         }
         dfs(0,0,0,n*n-1);
         for(int i = 0 ; i < m ; i++){
-            tokens = bufferedReader.readLine().split(" ");
+            st = new StringTokenizer(br.readLine());
             //                                        우 하 좌 상
-            int d = Integer.parseInt(tokens[0])-1; // 상 하 좌 우
-            int s = Integer.parseInt(tokens[1]);   // 0  1  2  3
+            int d = Integer.parseInt(st.nextToken())-1; // 상 하 좌 우
+            int s = Integer.parseInt(st.nextToken());   // 0  1  2  3
 
             // 구슬 제거
             deleteMarble(d,s);
