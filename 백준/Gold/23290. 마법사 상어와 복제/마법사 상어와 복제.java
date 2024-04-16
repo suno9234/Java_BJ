@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.*;
 
@@ -6,7 +5,8 @@ public class Main{
 
 	static int m, s, sx, sy;
 	static int finalScore, sharkRoute, answer;
-	static HashMap<Integer, Integer>[][] map,nMap;
+	static int[] ds = new int[3];
+	static int[][][] map, nMap;
 	static int[] dx = { 0, -1, -1, -1, 0, 1, 1, 1 };
 	static int[] dy = { -1, -1, 0, 1, 1, 1, 0, -1 };
 	static int[] sDx = { -1, 0, 1, 0 };
@@ -17,7 +17,7 @@ public class Main{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		StringBuilder sb = new StringBuilder();
-		map = new HashMap[4][4];
+		map = new int[4][4][8];
 		smells = new ArrayDeque();
 		for (int i = 0; i < 2; i++) {
 			int[][] smell = new int[4][4];
@@ -25,21 +25,12 @@ public class Main{
 		}
 		m = Integer.parseInt(st.nextToken());
 		s = Integer.parseInt(st.nextToken());
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				map[i][j] = new HashMap();
-			}
-		}
 		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
 			int fx = Integer.parseInt(st.nextToken()) - 1;
 			int fy = Integer.parseInt(st.nextToken()) - 1;
 			int d = Integer.parseInt(st.nextToken()) - 1;
-			if (map[fx][fy].get(d) == null) {
-				map[fx][fy].put(d, 1);
-			} else {
-				map[fx][fy].put(d, map[fx][fy].get(d) + 1); // 방향 마리수
-			}
+			map[fx][fy][d]++;
 		}
 		st = new StringTokenizer(br.readLine());
 		sx = Integer.parseInt(st.nextToken()) - 1;
@@ -48,67 +39,58 @@ public class Main{
 		while (s > 0) {
 			// 1. 상어에게 복제 마법을 건다.
 			// map은 건들지 않을거임
-			nMap = new HashMap[4][4];
-			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
-					nMap[i][j] = new HashMap();
-				}
-			}
+			nMap = new int[4][4][8];
 			// 2. 물고기가 한 칸 이동한다.
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
-					for (int key : map[i][j].keySet()) {
-						int cnt = map[i][j].get(key);
-						// key = 방향 cnt = 마리수
-						int keyCnt = 0;
-						while (keyCnt < 8) {
-							int now = (key-keyCnt+8)%8;
-							int nx = i + dx[now];
-							int ny = j + dy[now];
-							if (nx >= 0 && ny >= 0 && nx < 4 && ny < 4 && !(nx == sx && ny == sy)
-									&& smell[nx][ny] == 0) {
-								// 다음 방향의 칸에 해당 방향의 상어가 없으면
-								int nMGet = nMap[nx][ny].getOrDefault(now,-1);
-								if(nMGet < 0) {
-									nMap[nx][ny].put(now, cnt);
-								} else {
-									nMap[nx][ny].put(now, nMGet + cnt);
+					for (int k = 0; k < 8; k++) {
+						int cnt = map[i][j][k];
+						if (cnt > 0) {
+							// k = 방향 cnt = 마리수
+							int keyCnt = 0;
+							while (keyCnt < 8) {
+								int now = (k - keyCnt + 8) % 8;
+								// 현재 방향 now
+								int nx = i + dx[now];
+								int ny = j + dy[now];
+								if (nx >= 0 && ny >= 0 && nx < 4 && ny < 4 && !(nx == sx && ny == sy) && smell[nx][ny] == 0) {
+									//  현재 방향의 칸 검사해서 된다면
+									nMap[nx][ny][now] += cnt;
+									break;
 								}
-								break;
+								keyCnt++;
 							}
-							keyCnt++;
-						}
-						if (keyCnt == 8) {
-							// 움직일 수 없는 경우
-							int nMGet = nMap[i][j].getOrDefault(key, -1);
-							if (nMGet < 0) {
-								nMap[i][j].put((key), cnt);
-							} else {
-								nMap[i][j].put((key), nMGet + cnt);
+							if (keyCnt == 8) {
+								// 움직일 수 없는 경우
+								nMap[i][j][k] += cnt;
+								// 그냥 추가
 							}
-							// 그냥 추가
 						}
 					}
 				}
 			}
 			// 3. 상어 이동
-			sharkRoute = 999;
 			finalScore = -1;
-			getSharkRoute(sx, sy, 0, 0, 0, nMap);
-			int[] ds = new int[3];
-			for (int j = 0; j < 3; j++) {
-				ds[2 - j] = sharkRoute % 10 - 1;
-				sharkRoute /= 10;
-			}
+//			sharkRoute = 999;
+//			getSharkRoute(sx, sy, 0, 0, 0, nMap);
+//			for (int j = 0; j < 3; j++) {
+//				ds[2 - j] = sharkRoute % 10 - 1;
+//				sharkRoute /= 10;
+//			}
+			getSharkRoute2(sx, sy);
 			int[][] nowSmell = new int[4][4];
-			for (int j = 0; j < 3; j++) {
-				sx += sDx[ds[j]];
-				sy += sDy[ds[j]];
-				if (nMap[sx][sy].size() > 0) {
-					nowSmell[sx][sy]++;
-					smell[sx][sy]++;
+			for (int i = 0; i < 3; i++) {
+				sx += sDx[ds[i]];
+				sy += sDy[ds[i]];
+				int flag = 0;
+				for (int j = 0; j < 8; j++) {
+					if (flag == 0 && nMap[sx][sy][j] > 0) {
+						flag = 1;
+						nowSmell[sx][sy]++;
+						smell[sx][sy]++;
+					}
+					nMap[sx][sy][j] = 0;
 				}
-				nMap[sx][sy] = new HashMap();
 			}
 			smells.add(nowSmell);
 
@@ -125,14 +107,8 @@ public class Main{
 			// 5. 1에서 마법에 걸린 상어가 복제된다.
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
-					for (int key : map[i][j].keySet()) {
-						int origin = map[i][j].get(key);
-						int cnt = nMap[i][j].getOrDefault(key, -1);
-						if (cnt < 0) {
-							nMap[i][j].put(key, origin);
-						} else {
-							nMap[i][j].put(key, cnt + origin);
-						}
+					for (int k = 0; k < 8; k++) {
+						nMap[i][j][k] += map[i][j][k];
 					}
 				}
 			}
@@ -141,13 +117,68 @@ public class Main{
 		}
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
-				for (int key : map[i][j].keySet()) {
-					answer += map[i][j].get(key);
+				for (int k = 0; k < 8; k++) {
+					answer += map[i][j][k];
 				}
 			}
 		}
 		System.out.println(answer);
 		br.close();
+	}
+
+	static void getSharkRoute2(int x, int y) {
+		int score = 0;
+		int ns0 = 0;
+		int ns1 = 0;
+		int ns2 = 0;
+		for (int i = 0; i < 4; i++) {
+			x += sDx[i];
+			y += sDy[i];
+			if (x >= 0 && y >= 0 && x < 4 && y < 4) {
+				ns0 = 0;
+				for (int k = 0; k < 8; k++) {
+					ns0 += nMap[x][y][k];
+				}
+				score += ns0;
+				for (int j = 0; j < 4; j++) {
+					x += sDx[j];
+					y += sDy[j];
+					if (x >= 0 && y >= 0 && x < 4 && y < 4) {
+						ns1 = 0;
+						for (int k = 0; k < 8; k++) {
+							ns1 += nMap[x][y][k];
+						}
+						score += ns1;
+						for (int k = 0; k < 4; k++) {
+							x += sDx[k];
+							y += sDy[k];
+							if (x >= 0 && y >= 0 && x < 4 && y < 4) {
+								ns2 = 0;
+								if ((j + 2) % 4 != k) {
+									for (int l = 0; l < 8; l++) {
+										ns2 += nMap[x][y][l];
+									}
+								}
+								score += ns2;
+								if (score > finalScore) {
+									finalScore = score;
+									ds = new int[] { i, j, k };
+								}
+								score -= ns2;
+							}
+							x -= sDx[k];
+							y -= sDy[k];
+						}
+						score -= ns1;
+					}
+					x -= sDx[j];
+					y -= sDy[j];
+				}
+				score -= ns0;
+			}
+			x -= sDx[i];
+			y -= sDy[i];
+		}
 	}
 
 	static void getSharkRoute(int x, int y, int cnt, int route, int score, HashMap<Integer, Integer>[][] map) {
@@ -164,10 +195,10 @@ public class Main{
 			int ny = y + sDy[i];
 			if (nx >= 0 && ny >= 0 && nx < 4 && ny < 4) {
 				int ns = 0;
-				if(cnt == 2 && route%10-1 ==(i+2)%4) {
+				if (cnt == 2 && route % 10 - 1 == (i + 2) % 4) {
 					// 경로의 길이가 2이고 , 현재 방향과 마지막에 넣은 것이 반대방향이면 물고기는 이미 없다
 					getSharkRoute(nx, ny, cnt + 1, route * 10 + (i + 1), score, map);
-				}else {
+				} else {
 					for (int key : map[nx][ny].keySet()) {
 						ns += map[nx][ny].get(key);
 					}
