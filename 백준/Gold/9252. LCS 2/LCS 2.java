@@ -13,9 +13,11 @@ public class Main{
 		s1 = br.readLine();
 		s2 = br.readLine();
 		s = new ArrayDeque<>();
-		dp = new int[s1.length()+1][s2.length()+1];
-		for(int i = 1 ; i < s1.length()+1; i++) {
-			for(int j = 1 ; j < s2.length()+1;j++) {
+        int s1l = s1.length();
+        int s2l = s2.length();
+		dp = new int[s1l+1][s2l+1];
+		for(int i = 1 ; i < s1l+1; i++) {
+			for(int j = 1 ; j < s2l+1;j++) {
 				if(s1.charAt(i-1) == s2.charAt(j-1)) {
 					dp[i][j] = dp[i-1][j-1]+1;
 				}else {
@@ -23,13 +25,12 @@ public class Main{
 				}
 			}
 		}
-		getAnswer(s1.length(),s2.length());
-		while(!s.isEmpty()) {
+		getAnswer(s1l,s2l);
+		sb.append(s.size());
+        while(!s.isEmpty()) {
 			sb.append(s.pop());
 		}
-		System.out.println(sb.toString().length());
 		System.out.println(sb.toString());
-		
 	}
 	static void getAnswer(int x , int y) {
 		if(x == 0 && y == 0) return;
