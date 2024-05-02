@@ -95,11 +95,6 @@ public class Main{
 			}
 		}
 		int answer = 0;
-//		System.out.println(Arrays.toString(minDistFox));
-//		System.out.println("걸어서도착");
-//		System.out.println(Arrays.toString(minDistWolf[0]));
-//		System.out.println("뛰어서도착");
-//		System.out.println(Arrays.toString(minDistWolf[1]));
 		for (int i = 1; i < n + 1; i++) {
 			if (minDistFox[i] < Math.min(minDistWolf[0][i], minDistWolf[1][i])) {
 				answer++;
