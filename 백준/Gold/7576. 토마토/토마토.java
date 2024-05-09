@@ -1,70 +1,59 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        String [] tokens = bufferedReader.readLine().split(" ");
-        int m = Integer.parseInt(tokens[0]);
-        int n = Integer.parseInt(tokens[1]);
-        int [][] tomatoes = new int[n][m];
-        Queue <Coor> queue = new LinkedList<Coor>();
-        for (int i = 0; i < n; i++) {
-            tokens = bufferedReader.readLine().split(" ");
-            for(int j = 0 ; j < m ;j++){
-                tomatoes[i][j] = Integer.parseInt(tokens[j]);
-                if(tokens[j].equals("1")){
-                    queue.add(new Coor(i,j));
-                }
-            }
-        }
+	static int n,m;
+	static int [] dx = {1,-1,0,0};
+	static int [] dy = {0,0,1,-1};
+	static int [][] map;
+	static boolean [][] v;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringBuilder sb = new StringBuilder();
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
+		map = new int[m][n];
+		v = new boolean[m][n];
+		int total = n*m;
+		int cnt = 0;
+		ArrayDeque<int [] > q = new ArrayDeque<>();
+		for(int i = 0 ; i < m ; i++) {
+			st = new StringTokenizer(br.readLine());
+			for(int j = 0 ; j < n ; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				if(map[i][j] == 1) {
+					q.add(new int[] {i,j,0});
+					v[i][j] = true;
+					cnt++;
+				}else if(map[i][j] == -1) {
+					total--;
+				}
+			}
+		}
+		int answer = 0;
+		while(!q.isEmpty()) {
+			int [] now = q.poll();
+			int x = now[0];
+			int y = now[1];
+			int d = now[2];
+			for(int i = 0 ; i <4 ; i++) {
+				int nx = x + dx[i];
+				int ny = y + dy[i];
+				if(nx>=0 && ny >=0 && nx < m && ny < n && !v[nx][ny] && map[nx][ny] == 0) {
+					v[nx][ny] = true;
+					answer = d+1;
+					cnt++;
+					q.add(new int[] {nx,ny,d+1});
+				}
+			}
+		}
+		if(cnt == total) {
+			System.out.println(answer);
+		}else {
+			System.out.println(-1);
+		}
+		
+	}
 
-        int [] dx = {1,-1,0, 0 };
-        int [] dy = {0, 0,1,-1};
-        int answer = 0;
-        while(!queue.isEmpty()){
-            Queue<Coor> temp = new LinkedList<Coor>();
-            while(!queue.isEmpty()){
-                Coor now = queue.poll();
-                //System.out.printf("%d %d %d || ",now.x,now.y,now.z);
-                for(int i = 0 ; i < 4 ; i++){
-                    int nx = now.x+dx[i];
-                    int ny = now.y+dy[i];
-                    if(nx >=0 && ny >=0  && nx<n && ny < m &&tomatoes[nx][ny]== 0){
-                        tomatoes[nx][ny] = 1;
-                        temp.add(new Coor(nx,ny));
-                    }
-                }
-            }
-            answer+=1;
-            queue = temp;
-        }
-        int _sum = n*m;
-        for(int i = 0; i< n; i++){
-            for(int j = 0; j < m; j++){
-                if(tomatoes[i][j] == 0){
-                    _sum--;
-                }
-            }
-        }
-
-        if(_sum == n*m) {
-            System.out.println(answer-1);
-        }else{
-            System.out.println(-1);
-        }
-    }
-    public static class Coor{
-        int x,y;
-        Coor(int x, int y){
-            this.x = x;
-            this.y = y;
-
-        }
-    }
 }
-
