@@ -1,108 +1,67 @@
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(bufferedReader.readLine());
-        Tree tree = new Tree();
-        for(int i = 0 ; i < n; i++){
-            String nl = bufferedReader.readLine();
-            Node nodeL = null;
-            Node nodeR = null;
-            Node nodeP;
-            char parent = nl.charAt(0);
-            char left = nl.charAt(2) ;
-            char right = nl.charAt(4);
-            if(left != '.'){
-                nodeL = new Node(left,null,null);
-            }
-            if(right != '.'){
-                nodeR = new Node(right, null,null);
-            }
-            nodeP = new Node(parent,nodeL,nodeR);
-            tree.insertNode(nodeP);
-        }
-        tree.preOrder();
-        System.out.println();
-        tree.inOrder();
-        System.out.println();
-        tree.postOrder();
 
-    }
-}
+  static int n, answer = 0;
 
-class Tree{
-    Node headNode;
+  static char[][] tree;
 
-    public void insertNode(Node node){
-        if (headNode == null) {
-            this.headNode = node;
-        }else{
-            insertNode(this.headNode,node);
-        }
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringBuilder sb = new StringBuilder();
+    n = Integer.parseInt(br.readLine());
+    tree = new char[26][2];
+    for (int i = 0; i < n; i++) {
+      String[] tokens = br.readLine().split(" ");
+      char parent = tokens[0].charAt(0);
+      char childL = tokens[1].charAt(0);
+      char childR = tokens[2].charAt(0);
+      tree[parent - 'A'][0] = childL;
+      tree[parent - 'A'][1] = childR;
     }
+    sb.append(preOrder('A', "")).append("\n").append(inOrder('A', "")).append("\n")
+        .append(postOrder('A', ""));
+    System.out.println(sb);
+  }
 
-    private void insertNode(Node headNode ,Node node){
-        if(headNode.left != null) {
-            if(headNode.left.value == node.value){
-                headNode.left = node;
-                return;
-            }
-            insertNode(headNode.left, node);
-        }
-        if(headNode.right != null) {
-            if(headNode.right.value == node.value){
-                headNode.right = node;
-                return;
-            }
-            insertNode(headNode.right, node);
-        }
+  static String preOrder(char idx, String result) {
+    char Left = tree[idx - 'A'][0];
+    char Right = tree[idx - 'A'][1];
+    result += idx;
+    if (Left != '.') {
+      result = preOrder(Left, result);
     }
+    if (Right != '.') {
+      result = preOrder(Right, result);
+    }
+    return result;
+  }
 
-    public void preOrder(){
-        preOrder(this.headNode);
+  static String postOrder(char idx, String result) {
+    char Left = tree[idx - 'A'][0];
+    char Right = tree[idx - 'A'][1];
+    if (Left != '.') {
+      result = postOrder(Left, result);
     }
-    public void inOrder(){
-        inOrder(this.headNode);
+    if (Right != '.') {
+      result = postOrder(Right, result);
     }
-    public void postOrder(){
-        postOrder(this.headNode);
-    }
-    public void preOrder(Node headNode){
-        if(headNode== null){
-            return ;
-        }
-        System.out.print(headNode.value);
-        preOrder(headNode.left);
-        preOrder(headNode.right);
-    }
-    public void inOrder(Node headNode){
-        if(headNode == null){
-            return;
-        }
-        inOrder(headNode.left);
-        System.out.print(headNode.value);
-        inOrder(headNode.right);
-    }
-    public void postOrder(Node headNode){
-        if(headNode == null){
-            return;
-        }
-        postOrder(headNode.left);
-        postOrder(headNode.right);
-        System.out.print(headNode.value);
-    }
-}
+    result += idx;
+    return result;
+  }
 
-class Node{
-    char value;
-    Node left,right;
-    public Node(char value,Node left,Node right){
-        this.value = value;
-        this.left = left;
-        this.right = right;
+  static String inOrder(char idx, String result) {
+    char Left = tree[idx - 'A'][0];
+    char Right = tree[idx - 'A'][1];
+
+    if (Left != '.') {
+      result = inOrder(Left, result);
     }
+    result += idx;
+    if (Right != '.') {
+      result = inOrder(Right, result);
+    }
+    return result;
+  }
 }
