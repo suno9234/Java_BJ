@@ -32,6 +32,10 @@ public class Main {
       int x = now[0];
       int y = now[1];
       int time = now[2];
+      if(x == n-1 && y == n-1){
+          System.out.println(time);
+          return;
+      }
       for (int i = 0; i < 4; i++) {
         int nx = x + dx[i];
         int ny = y + dy[i];
