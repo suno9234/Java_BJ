@@ -1,65 +1,60 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.PriorityQueue;
 
-public class Main{
-	static int n, answer, mid;
-	static int[] dx = { 1, -1, 0, 0 };
-	static int[] dy = { 0, 0, 1, -1 };
-	static boolean[][][] v;
-	static int[][] _map;
+public class Main {
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		n = Integer.parseInt(br.readLine());
-		v = new boolean[n][n][n * 2];
-		_map = new int[n][n];
-		for (int i = 0; i < n; i++) {
-			String nl = br.readLine();
-			for (int j = 0; j < n; j++) {
-				_map[i][j] = nl.charAt(j) - '0';
-			}
-		}
-		for (int i = 0; i < n * 2; i++) {
-			dfs(0, 0,i, i);
-		}
-		System.out.println(answer);
-		br.close();
-	}
+  static int answer = 0;
+  static int n;
+  static int[][] map;
+  static int[] dx = {0, 0, 1, -1};
+  static int[] dy = {1, -1, 0, 0};
+  static int[][] times;
 
-	static void dfs(int x, int y, int startCnt,int cnt) {
-		boolean result = false;
-		v[x][y][cnt] = true;
-		if(x == n-1 && y == n-1) {
-			System.out.println(startCnt);
-			System.exit(0);
-		}
-		for (int i = 0; i < 4; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
-			if (nx >= 0 && ny >= 0 && nx < n && ny < n && !v[nx][ny][cnt]) {
-				if (_map[nx][ny] == 1) {
-					// 흰방이면
-					if (v[nx][ny][cnt]) {
-						// 이미 갈 수 있으면
-						result = true;
-					} else {
-						dfs(nx, ny, startCnt,cnt);
-					}
-				} else {
-					// 아직 방문하지 않은 검은방
-					if (v[nx][ny][cnt]) {
-						result = true;
-					} else {
-						if (cnt > 0) {
-							dfs(nx, ny, startCnt,cnt - 1);
-						}
-					}
-				}
-			}
-			if (result) {
-				v[x][y][cnt] = true;
-			}
-		}
-	}
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringBuilder sb = new StringBuilder();
+    n = Integer.parseInt(br.readLine());
+    map = new int[n][n];
+    times = new int[n][n];
+    for (int i = 0; i < n; i++) {
+      String l = br.readLine();
+      for (int j = 0; j < n; j++) {
+        map[i][j] = l.charAt(j) - '0';
+        times[i][j] = Integer.MAX_VALUE;
+      }
+    }
+
+    PriorityQueue<int[]> pq = new PriorityQueue<>((p1, p2) -> Integer.compare(p1[2], p2[2]));
+    pq.add(new int[]{0, 0, 0});
+    while (!pq.isEmpty()) {
+      int[] now = pq.poll();
+      int x = now[0];
+      int y = now[1];
+      int time = now[2];
+      for (int i = 0; i < 4; i++) {
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        if (nx >= 0 && ny >= 0 && nx < n && ny < n) {
+          if (times[nx][ny] == Integer.MAX_VALUE) {
+            if (map[nx][ny] == 1) {
+              pq.add(new int[]{nx, ny, time});
+              times[nx][ny] = time;
+            } else {
+              pq.add(new int[]{nx, ny, time + 1});
+              times[nx][ny] = time + 1;
+            }
+          }
+        }
+      }
+    }
+    System.out.println(times[n - 1][n - 1]);
+
+
+  }
+
+  static void dfs(int x, int y, int cnt) {
+
+  }
+
 }
